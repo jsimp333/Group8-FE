@@ -38,7 +38,7 @@ export const authOptions: NextAuthOptions = {
         firstname: { name: 'firstname', label: 'Firstname', type: 'text', placeholder: 'Enter Firstname' },
         lastname: { name: 'lastname', label: 'Lastname', type: 'text', placeholder: 'Enter Lastname' },
         email: { name: 'email', label: 'Email', type: 'email', placeholder: 'Enter Email' },
-        phoneNum: { name: 'phone', label: 'Phone Number', type: 'text', placeholder: 'Enter Phone Number' },
+        phone: { name: 'phone', label: 'Phone Number', type: 'text', placeholder: 'Enter Phone Number' },
         password: { name: 'password', label: 'Password', type: 'password', placeholder: 'Enter Password' }
       },
       async authorize(credentials) {
@@ -46,7 +46,7 @@ export const authOptions: NextAuthOptions = {
           const user = await axios.post('/register', {
             firstname: credentials?.firstname,
             lastname: credentials?.lastname,
-            phoneNum: credentials?.phoneNum,
+            phone: credentials?.phone,
             password: credentials?.password,
             email: credentials?.email,
             role: 1,

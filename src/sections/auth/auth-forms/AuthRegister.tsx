@@ -66,7 +66,7 @@ export default function AuthRegister({ providers, csrfToken }: any) {
           firstname: '',
           lastname: '',
           email: '',
-          phoneNum: '',
+          phone: '',
           password: '',
           submit: null
         }}
@@ -87,7 +87,7 @@ export default function AuthRegister({ providers, csrfToken }: any) {
             lastname: values.lastname,
             email: trimmedEmail,
             password: values.password,
-            phoneNum: values.phoneNum,
+            phone: values.phone,
             callbackUrl: APP_DEFAULT_PATH
           }).then((res: any) => {
             if (res?.error) {
@@ -149,19 +149,19 @@ export default function AuthRegister({ providers, csrfToken }: any) {
                   <InputLabel htmlFor="phone-signup">Phone Number</InputLabel>
                   <OutlinedInput
                     fullWidth
-                    error={Boolean(touched.phoneNum && errors.phoneNum)}
+                    error={Boolean(touched.phone && errors.phone)}
                     id="phone-signup"
-                    value={values.phoneNum}
-                    name="phone number"
+                    value={values.phone}
+                    name="phone"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     placeholder="Enter your phone number"
                     inputProps={{}}
                   />
                 </Stack>
-                {touched.phoneNum && errors.phoneNum && (
+                {touched.phone && errors.phone && (
                   <FormHelperText error id="helper-text-phone-signup">
-                    {errors.phoneNum}
+                    {errors.phone}
                   </FormHelperText>
                 )}
               </Grid>
