@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 // project imports
 import MainCard from 'components/MainCard';
 
-// ==============================|| SAMPLE PAGE ||============================== //
+// ==============================|| HOME PAGE ||============================== //
 
 export default function HomePage() {
   return (

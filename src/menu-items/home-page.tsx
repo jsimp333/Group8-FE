@@ -12,7 +12,7 @@ import { NavItemType } from 'types/menu';
 // icons
 const icons = { ChromeOutlined };
 
-// ==============================|| MENU ITEMS - SAMPLE PAGE ||============================== //
+// ==============================|| MENU ITEMS - HOME PAGE ||============================== //
 
 const homePage: NavItemType = {
   id: 'home-page',
