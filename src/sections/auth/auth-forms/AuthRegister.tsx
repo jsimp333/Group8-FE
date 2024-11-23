@@ -39,6 +39,8 @@ import { StringColorProps } from 'types/password';
 
 // ============================|| AWS CONNITO - LOGIN ||============================ //
 
+const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+
 export default function AuthRegister({ providers, csrfToken }: any) {
   const [level, setLevel] = useState<StringColorProps>();
   const [showPassword, setShowPassword] = useState(false);
@@ -73,6 +75,7 @@ export default function AuthRegister({ providers, csrfToken }: any) {
         validationSchema={Yup.object().shape({
           firstname: Yup.string().max(255).required('First Name is required'),
           lastname: Yup.string().max(255).required('Last Name is required'),
+          phone: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
           email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
           password: Yup.string()
             .required('Password is required')
