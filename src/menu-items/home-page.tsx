@@ -16,7 +16,7 @@ const icons = { ChromeOutlined };
 
 const homePage: NavItemType = {
   id: 'home-page',
-  title: <FormattedMessage id="Home page" />,
+  title: <FormattedMessage id="Home Page" />,
   type: 'group',
   url: '/home-page',
   icon: icons.ChromeOutlined
