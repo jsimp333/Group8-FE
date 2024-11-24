@@ -21,6 +21,14 @@ import AnimateButton from 'components/@extended/AnimateButton';
 
 import axios from 'utils/axios';
 
+const initialValues = {
+  title: '',
+  author: '',
+  date: '',  
+  isbn: '',  
+  submit: null
+};
+
 export default function SendBook({
   onSuccess,
   onError
@@ -31,13 +39,7 @@ export default function SendBook({
   return (
     <>
       <Formik
-        initialValues={{
-          title: '',
-          author: '',
-          date: undefined,
-          isbn: undefined,
-          submit: null
-        }}
+        initialValues={initialValues}
         validationSchema={Yup.object().shape({
           title: Yup.string().max(255).required('Title is required'),
           author: Yup.string().max(255).required('Author is required'),
@@ -51,18 +53,10 @@ export default function SendBook({
           console.dir(values);
 
           axios
-            .post('c/message', { title: values.title, author: values.author, date: values.date, isbn: values.isbn })
+            .post('/book', { title: values.title, author: values.author, date: values.date, isbn: values.isbn })
             .then((response) => {
               setSubmitting(false);
-              resetForm({
-                values: {
-                  title: '',
-                  author: '',
-                  date: undefined,
-                  isbn: undefined,
-                  submit: null
-                }
-              });
+              resetForm({ values: initialValues });
               onSuccess();
             })
             .catch((error) => {

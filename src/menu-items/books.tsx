@@ -15,8 +15,8 @@ const icons = { MessageOutlined, EmailIcon, SendIcon };
 // ==============================|| MENU ITEMS - PAGES ||============================== //
 
 const pages: NavItemType = {
-  id: 'group-pages',
-  title: <FormattedMessage id="pages" />,
+  id: 'group-book-pages',
+  title: <FormattedMessage id="book-pages" />,
   type: 'group',
   children: [
     {
