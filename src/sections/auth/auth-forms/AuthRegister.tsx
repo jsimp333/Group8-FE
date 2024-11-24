@@ -39,7 +39,7 @@ import { StringColorProps } from 'types/password';
 
 // ============================|| AWS CONNITO - LOGIN ||============================ //
 
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+const phoneRegExp = /^\W?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
 
 export default function AuthRegister({ providers, csrfToken }: any) {
   const [level, setLevel] = useState<StringColorProps>();
@@ -84,13 +84,14 @@ export default function AuthRegister({ providers, csrfToken }: any) {
         })}
         onSubmit={async (values, { setErrors, setSubmitting }) => {
           const trimmedEmail = values.email.trim();
+          const formattedPhoneNumber = values.phone.replace(/\D/g,'').replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
           signIn('register', {
             redirect: false,
             firstname: values.firstname,
             lastname: values.lastname,
             email: trimmedEmail,
             password: values.password,
-            phone: values.phone,
+            phone: formattedPhoneNumber,
             callbackUrl: APP_DEFAULT_PATH
           }).then((res: any) => {
             if (res?.error) {
