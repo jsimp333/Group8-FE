@@ -46,8 +46,8 @@ export default function SendBook({
           date: Yup.number().min(1000, 'Year must be greater than 1000')
             .max((new Date().getFullYear()), 'Year cannot be greater than the current year')
             .required('Publication year is required'),
-          isbn: Yup.string().matches(/^\d{10}$|^\d{13}$/, 'ISBN must be 10 or 13 digits')
-            .required('10 or 13 digit ISBN is required')
+          isbn: Yup.string().matches(/^\d{13}$/, 'ISBN must be 13 digits')
+            .required('13 digit ISBN is required')
         })}
         onSubmit={(values, { setErrors, setSubmitting, setValues, resetForm }) => {
           console.dir(values);
