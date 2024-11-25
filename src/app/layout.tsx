@@ -6,8 +6,8 @@ import './globals.css';
 import ProviderWrapper from './ProviderWrapper';
 
 export const metadata: Metadata = {
-  title: 'TCSS 460 UI Template',
-  description: 'TCSS 460 UI Template'
+  title: 'Local Library',
+  description: 'TCSS 460 Library front-end group 8'
 };
 
 export default function RootLayout({ children }: { children: React.ReactElement }) {

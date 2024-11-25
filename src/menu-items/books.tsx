@@ -5,39 +5,42 @@ import { FormattedMessage } from 'react-intl';
 import MessageOutlined from '@ant-design/icons/MessageOutlined';
 import EmailIcon from '@mui/icons-material/Email';
 import SendIcon from '@mui/icons-material/Send';
+import LibraryIcon from '@mui/icons-material/LibraryBooks';
+import BookIcon from '@mui/icons-material/Book';
+import SearchIcon from '@mui/icons-material/Search';
 
 // type
 import { NavItemType } from 'types/menu';
 
 // icons
-const icons = { MessageOutlined, EmailIcon, SendIcon };
+const icons = { MessageOutlined, EmailIcon, SendIcon, BookIcon, SearchIcon, LibraryIcon };
 
 // ==============================|| MENU ITEMS - PAGES ||============================== //
 
 const pages: NavItemType = {
   id: 'group-book-pages',
-  title: <FormattedMessage id="book-pages" />,
+  title: <FormattedMessage id="Book Pages" />,
   type: 'group',
   children: [
     {
       id: 'books',
       title: <FormattedMessage id="books" />,
       type: 'collapse',
-      icon: icons.MessageOutlined,
+      icon: icons.LibraryIcon,
       children: [
         {
           id: 'add-book',
           title: <FormattedMessage id="add-book" />,
           type: 'item',
           url: '/books/add',
-          icon: icons.SendIcon
+          icon: icons.BookIcon
         },
         {
           id: 'search-books',
           title: <FormattedMessage id="search-books" />,
           type: 'item',
           url: '/books/search',
-          icon: icons.EmailIcon
+          icon: icons.SearchIcon
         }
       ]
     }
