@@ -21,54 +21,45 @@ import AnimateButton from 'components/@extended/AnimateButton';
 import SearchSelector from 'components/SearchSelector';
 
 import axios from 'utils/axios';
+import { IBookResponse } from 'types/books';
 
 const initialValues = {
   searchValue: '',
   submit: null
 };
 
-export default function SearchBook({
-  onSuccess,
-  onError
-}: {
-  onSuccess: () => void;
-  onError: (msg: string) => void;
-}) {
-    const [searchMethod, setSearchMethod] = useState(1);
+export default function SearchBook({ onSuccess, onError }: { onSuccess: (q: IBookResponse[]) => void; onError: (msg: string) => void }) {
+  const [searchMethod, setSearchMethod] = useState(1);
 
-    const searchMethods: Record<number, { label: string; apiPath: string }> = {
-        1: { label: 'Title', apiPath: '/book/title/' },
-        2: { label: 'Author', apiPath: '/book/author/' },
-        3: { label: 'Year', apiPath: '/book/year/' },
-        4: { label: 'ISBN', apiPath: '/book/isbn/' },
-    };
+  const searchMethods: Record<number, { label: string; apiPath: string }> = {
+    1: { label: 'Title', apiPath: '/book/title/' },
+    2: { label: 'Author', apiPath: '/book/author/' },
+    3: { label: 'Year', apiPath: '/book/year/' },
+    4: { label: 'ISBN', apiPath: '/book/isbn/' }
+  };
 
-    const currentMethod = searchMethods[searchMethod];
+  const currentMethod = searchMethods[searchMethod];
 
   return (
     <>
       <Stack spacing={3} sx={{ mb: 2 }}>
-        <SearchSelector
-          initialValue={searchMethod}
-          onClick={(_, newMethod) => setSearchMethod(newMethod)}
-        />
+        <SearchSelector initialValue={searchMethod} onClick={(_, newMethod) => setSearchMethod(newMethod)} />
       </Stack>
       <Formik
         initialValues={initialValues}
         validationSchema={Yup.object().shape({
-            searchValue: Yup.string()
-                .max(255, `${currentMethod.label} is too long`)
-                .required(`${currentMethod.label} is required`),        
+          searchValue: Yup.string().max(255, `${currentMethod.label} is too long`).required(`${currentMethod.label} is required`)
         })}
         onSubmit={(values, { setErrors, setSubmitting, resetForm }) => {
-            const route = `${currentMethod.apiPath}${(values.searchValue)}`;
+          const route = `${currentMethod.apiPath}${values.searchValue}`;
 
           axios
             .get(route)
             .then((response) => {
               setSubmitting(false);
-            //   resetForm({ values: initialValues });
-              onSuccess();
+              //   resetForm({ values: initialValues });
+              console.log(response)
+              onSuccess(response.data.entries as IBookResponse[]);
             })
             .catch((error) => {
               console.error(error);
@@ -93,13 +84,13 @@ export default function SearchBook({
                     name="searchValue"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    placeholder= {`Enter ${currentMethod.label}`}
+                    placeholder={`Enter ${currentMethod.label}`}
                     fullWidth
                     error={Boolean(touched.searchValue && errors.searchValue)}
                   />
                 </Stack>
                 {touched.searchValue && errors.searchValue && (
-                  <FormHelperText error id="standard-weight-helper-text-title-book-send">    
+                  <FormHelperText error id="standard-weight-helper-text-title-book-send">
                     {errors.searchValue}
                   </FormHelperText>
                 )}

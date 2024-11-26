@@ -15,5 +15,8 @@
   "send-book": "Send Book",
   "search-book": "Search Book",
   "under-construction": "Under Construction",
-  "view-messages": "View Messages"
+  "view-messages": "View Messages",
+  "book-pages": "Book Pages",
+  "add-book": "Add Book",
+  "search-books": "Search Books"
 }

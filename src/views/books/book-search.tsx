@@ -11,6 +11,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Alert } from '@mui/material';
 
 import SendBook from 'sections/book-forms/bookSearch';
+import { IBook, IBookResponse } from 'types/books';
+import BookView from 'components/BookView';
 
 const defaultTheme = createTheme();
 
@@ -28,13 +30,15 @@ const EMPTY_ALERT: IAlert = {
 
 export default function AddBook() {
   const [alert, setAlert] = React.useState(EMPTY_ALERT);
+  const [results, setResults] = React.useState([] as IBookResponse[]);
 
-  const onSuccess = () => {
+  const onSuccess = (queryResults: IBookResponse[]) => {
     setAlert({
       showAlert: true, //TODO -> false, no alert shown on success
       alertMessage: 'Book search successful!',
       alertSeverity: 'success'
     });
+    setResults(queryResults);
   }
 
   const onError = (message: string) => {
@@ -52,7 +56,7 @@ export default function AddBook() {
           {alert.alertMessage}
         </Alert>
       )}
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="lg">
         <CssBaseline />
         <Box
           sx={{
@@ -69,7 +73,12 @@ export default function AddBook() {
             Search Book
           </Typography>
           <Box sx={{ mt: 1 }}>
-            <SendBook onSuccess={onSuccess} onError={onError} />
+            <SendBook onSuccess={(q : IBookResponse[]) => onSuccess(q)} onError={onError} />
+          </Box>
+          <Box sx={{ mt: 3 }}>
+            {results.map((book: IBookResponse) => (
+              <BookView key={book.IBook.isbn13} book={book.IBook} />
+            ))}
           </Box>
         </Box>
       </Container>

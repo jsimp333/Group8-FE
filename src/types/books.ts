@@ -47,4 +47,9 @@ interface IBook {
     series_info?: ISeriesInfo;
 }
 
-export type { BookInfo, IRatings, IUrlIcon, ISeriesInfo, IBook };
+type IBookResponse = {
+    IBook: IBook;
+    id: number;
+  }
+
+export type { BookInfo, IRatings, IUrlIcon, ISeriesInfo, IBook, IBookResponse };
