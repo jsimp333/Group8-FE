@@ -2,9 +2,6 @@
 import { FormattedMessage } from 'react-intl';
 
 // assets
-import MessageOutlined from '@ant-design/icons/MessageOutlined';
-import EmailIcon from '@mui/icons-material/Email';
-import SendIcon from '@mui/icons-material/Send';
 import LibraryIcon from '@mui/icons-material/LibraryBooks';
 import BookIcon from '@mui/icons-material/Book';
 import SearchIcon from '@mui/icons-material/Search';
@@ -13,7 +10,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { NavItemType } from 'types/menu';
 
 // icons
-const icons = { MessageOutlined, EmailIcon, SendIcon, BookIcon, SearchIcon, LibraryIcon };
+const icons = { BookIcon, SearchIcon, LibraryIcon };
 
 // ==============================|| MENU ITEMS - PAGES ||============================== //
 
@@ -24,20 +21,20 @@ const pages: NavItemType = {
   children: [
     {
       id: 'books',
-      title: <FormattedMessage id="books" />,
+      title: <FormattedMessage id="Books" />,
       type: 'collapse',
       icon: icons.LibraryIcon,
       children: [
         {
           id: 'add-book',
-          title: <FormattedMessage id="add-book" />,
+          title: <FormattedMessage id="Add Book" />,
           type: 'item',
           url: '/books/add',
           icon: icons.BookIcon
         },
         {
           id: 'search-books',
-          title: <FormattedMessage id="search-books" />,
+          title: <FormattedMessage id="Search Books" />,
           type: 'item',
           url: '/books/search',
           icon: icons.SearchIcon

@@ -1,83 +1,78 @@
-// 'use client';
+'use client';
 
-// import * as React from 'react';
-// import Avatar from '@mui/material/Avatar';
-// import CssBaseline from '@mui/material/CssBaseline';
-// import Box from '@mui/material/Box';
-// import EmailIcon from '@mui/icons-material/Email';
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
+import SendIcon from '@mui/icons-material/Send';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Alert } from '@mui/material';
 
-// import Typography from '@mui/material/Typography';
-// import Container from '@mui/material/Container';
-// import { createTheme, ThemeProvider } from '@mui/material/styles';
-// import { Divider, List } from '@mui/material';
+import SendBook from 'sections/book-forms/bookSearch';
 
-// // project import
-// import axios from 'utils/axios';
-// import { IMessage } from 'types/message';
-// import PrioritySelector from 'components/PrioritySelector';
-// import { NoMessage, MessageListItem } from 'components/MessageListItem';
+const defaultTheme = createTheme();
 
-// const defaultTheme = createTheme();
+interface IAlert {
+  showAlert: boolean;
+  alertMessage: string;
+  alertSeverity: string;
+}
 
-// export default function MessagesList() {
-//   const [messages, setMessages] = React.useState<IMessage[]>([]);
-//   const [priority, setPriority] = React.useState(0);
+const EMPTY_ALERT: IAlert = {
+  showAlert: false,
+  alertMessage: '',
+  alertSeverity: ''
+};
 
-//   React.useEffect(() => {
-//     axios
-//       .get('c/message/offset?limit=50&offset=0')
-//       .then((response) => {
-//         setMessages(response.data.entries);
-//         // console.dir(response.data);
-//       })
-//       .catch((error) => console.error(error));
-//   }, []);
+export default function AddBook() {
+  const [alert, setAlert] = React.useState(EMPTY_ALERT);
 
-//   const handleDelete = (name: string) => {
-//     axios
-//       .delete('c/message/' + name)
-//       .then((response) => {
-//         response.status == 200 && setMessages(messages.filter((msg) => msg.name !== name));
-//         // console.dir(response.status);
-//       })
-//       .catch((error) => console.error(error));
-//   };
+  const onSuccess = () => {
+    setAlert({
+      showAlert: true, //TODO -> false, no alert shown on success
+      alertMessage: 'Book search successful!',
+      alertSeverity: 'success'
+    });
+  }
 
-//   const handlePriorityClick = (event: React.MouseEvent<HTMLElement>, newPriority: number) => setPriority(newPriority ?? 0);
+  const onError = (message: string) => {
+    setAlert({
+      showAlert: true,
+      alertMessage: 'Book search not successful: ' + message,
+      alertSeverity: 'error'
+    });
+  };
 
-//   const messagesAsComponents = messages
-//     .filter((msg) => priority == 0 || priority == msg.priority)
-//     .map((msg, index, messages) => (
-//       <React.Fragment key={'msg list item: ' + index}>
-//         <MessageListItem message={msg} onDelete={handleDelete} />
-//         {index < messages.length - 1 && <Divider variant="middle" component="li" />}
-//       </React.Fragment>
-//     ));
-
-//   return (
-//     <ThemeProvider theme={defaultTheme}>
-//       <Container component="main" maxWidth="md">
-//         <CssBaseline />
-//         <Box
-//           sx={{
-//             marginTop: 8,
-//             display: 'flex',
-//             flexDirection: 'column',
-//             alignItems: 'center'
-//           }}
-//         >
-//           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-//             <EmailIcon />
-//           </Avatar>
-//           <Typography component="h1" variant="h5">
-//             Read Messages
-//           </Typography>
-//           <PrioritySelector initialValue={priority} onClick={handlePriorityClick} />
-//           <Box sx={{ mt: 1 }}>
-//             <List>{messagesAsComponents.length ? messagesAsComponents : <NoMessage />}</List>
-//           </Box>
-//         </Box>
-//       </Container>
-//     </ThemeProvider>
-//   );
-// }
+  return (
+    <ThemeProvider theme={defaultTheme}>
+      {alert.showAlert && (
+        <Alert severity={alert.alertSeverity as any} onClose={() => setAlert(EMPTY_ALERT)}>
+          {alert.alertMessage}
+        </Alert>
+      )}
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <SendIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Send Book
+          </Typography>
+          <Box sx={{ mt: 1 }}>
+            <SendBook onSuccess={onSuccess} onError={onError} />
+          </Box>
+        </Box>
+      </Container>
+    </ThemeProvider>
+  );
+}
