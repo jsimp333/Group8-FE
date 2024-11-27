@@ -16,25 +16,25 @@ const icons = { BookIcon, SearchIcon, LibraryIcon };
 
 const pages: NavItemType = {
   id: 'group-book-pages',
-  title: <FormattedMessage id="Book Pages" />,
+  title: <FormattedMessage id="book-pages" />,
   type: 'group',
   children: [
     {
       id: 'books',
-      title: <FormattedMessage id="Books" />,
+      title: <FormattedMessage id="books" />,
       type: 'collapse',
       icon: icons.LibraryIcon,
       children: [
         {
           id: 'add-book',
-          title: <FormattedMessage id="Add Book" />,
+          title: <FormattedMessage id="add-book" />,
           type: 'item',
           url: '/books/add',
           icon: icons.BookIcon
         },
         {
           id: 'search-books',
-          title: <FormattedMessage id="Search Books" />,
+          title: <FormattedMessage id="search-book" />,
           type: 'item',
           url: '/books/search',
           icon: icons.SearchIcon

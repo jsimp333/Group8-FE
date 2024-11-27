@@ -16,7 +16,7 @@ const icons = { HomeIcon };
 
 const homePage: NavItemType = {
   id: 'home-page',
-  title: <FormattedMessage id="Home Page" />,
+  title: <FormattedMessage id="home-page" />,
   type: 'group',
   url: '/home-page',
   icon: icons.HomeIcon
