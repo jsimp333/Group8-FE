@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // next
 
@@ -14,7 +14,7 @@ import Stack from '@mui/material/Stack';
 
 // third party
 import * as Yup from 'yup';
-import { Formik } from 'formik';
+import { Formik, FormikProps } from 'formik';
 
 // project import
 import AnimateButton from 'components/@extended/AnimateButton';
@@ -22,14 +22,17 @@ import SearchSelector from 'components/SearchSelector';
 
 import axios from 'utils/axios';
 import { IBookResponse } from 'types/books';
-
-const initialValues = {
-  searchValue: '',
-  submit: null
-};
+import { useSearchParams } from 'next/navigation';
 
 export default function SearchBook({ onSuccess, onError }: { onSuccess: (q: IBookResponse[]) => void; onError: (msg: string) => void }) {
-  const [searchMethod, setSearchMethod] = useState(1);
+  const queries = useSearchParams();
+  const formRef = useRef<FormikProps<{ searchValue: string; submit: null }> | null>(null);
+  const [searchMethod, setSearchMethod] = useState(queries.get('author') ? 2 : 1);
+
+  const initialValues = {
+    searchValue: queries.get('author') || '',
+    submit: null
+  };
 
   const searchMethods: Record<number, { label: string; apiPath: string }> = {
     1: { label: 'Title', apiPath: '/book/title/' },
@@ -40,12 +43,19 @@ export default function SearchBook({ onSuccess, onError }: { onSuccess: (q: IBoo
 
   const currentMethod = searchMethods[searchMethod];
 
+  useEffect(() => {
+    if (formRef.current && queries.has('author')) {
+      formRef.current.handleSubmit();
+    }
+  }, [queries]);
+
   return (
     <>
       <Stack spacing={3} sx={{ mb: 2 }}>
         <SearchSelector initialValue={searchMethod} onClick={(_, newMethod) => setSearchMethod(newMethod)} />
       </Stack>
       <Formik
+        innerRef={formRef}
         initialValues={initialValues}
         validationSchema={Yup.object().shape({
           searchValue: Yup.string().max(255, `${currentMethod.label} is too long`).required(`${currentMethod.label} is required`)
@@ -58,7 +68,7 @@ export default function SearchBook({ onSuccess, onError }: { onSuccess: (q: IBoo
             .then((response) => {
               setSubmitting(false);
               //   resetForm({ values: initialValues });
-              console.log(response)
+              console.log(response);
               onSuccess(response.data.entries as IBookResponse[]);
             })
             .catch((error) => {
