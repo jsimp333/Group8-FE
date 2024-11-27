@@ -6,13 +6,14 @@ import { useState, useEffect } from 'react';
 import { IBook } from 'types/books';
 import { BookCover } from 'book-cover-3d';
 import { Box, Container, Stack } from '@mui/system';
-import { Link, List, ListItem, Rating, Typography } from '@mui/material';
+import { FormGroup, FormControlLabel, Link, List, ListItem, Rating, Switch, Typography } from '@mui/material';
 import { numberWithCommas } from 'utils/design-utils';
 
 const bookWidths = [30, 40, 50, 60, 70, 80, 90, 100];
 
 export default function FullBookView() {
   const queries = useSearchParams();
+  const [_3dEnabled, set3dEnabled] = useState(true);
   const [book, setBook] = useState<undefined | null | IBook>(undefined); // undefined: loading, null: not found, book: found
 
   useEffect(() => {
@@ -35,6 +36,11 @@ export default function FullBookView() {
       });
   }, [queries]);
 
+  const handle3dChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.checked);
+    set3dEnabled(event.target.checked);
+  }
+
   return (
     <Container>
       {book === undefined && (
@@ -52,7 +58,7 @@ export default function FullBookView() {
         <Container sx={{mt: 3}}>
           <Stack direction="row" spacing={2}>
             <Box sx={{ mt: 10 }}>
-              <BookCover
+              {_3dEnabled ? (<BookCover
                 rotate={20}
                 rotateHover={60}
                 transitionDuration={3}
@@ -60,7 +66,14 @@ export default function FullBookView() {
                 bgColor="#333"
               >
                 <img src={book.icons.large} alt={book.title} />
-              </BookCover>
+              </BookCover>) : 
+              <img src={book.icons.large} alt={book.title} />}
+              
+              <Container sx={{mt: 3}}>
+                <FormGroup>
+                  <FormControlLabel control={<Switch onChange={handle3dChange} defaultChecked />} label="3D" />
+                </FormGroup>
+              </Container>
             </Box>
             <Stack direction="column" spacing={2} sx={{ pl: 4}}>
               <Typography variant="h2">{book.title}</Typography>
