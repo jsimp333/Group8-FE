@@ -11,7 +11,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Alert } from '@mui/material';
 
 import SendBook from 'sections/book-forms/bookSearch';
-import { IBook, IBookResponse } from 'types/books';
+import { IBookResponse } from 'types/books';
 import BookView from 'components/BookView';
 
 const defaultTheme = createTheme();

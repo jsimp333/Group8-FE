@@ -52,7 +52,7 @@ export default function SearchBook({ onSuccess, onError }: { onSuccess: (q: IBoo
         })}
         onSubmit={(values, { setErrors, setSubmitting, resetForm }) => {
           const route = `${currentMethod.apiPath}${values.searchValue}`;
-
+          console.log(route);
           axios
             .get(route)
             .then((response) => {
