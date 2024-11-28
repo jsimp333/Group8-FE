@@ -13,7 +13,6 @@ import { Alert } from '@mui/material';
 import SendBook from 'sections/book-forms/bookSearch';
 import { IBookResponse } from 'types/books';
 import BookView from 'components/BookView';
-import { useSearchParams } from 'next/navigation';
 
 const defaultTheme = createTheme();
 
@@ -40,7 +39,7 @@ export default function AddBook() {
       alertSeverity: 'success'
     });
     setResults(queryResults);
-  }
+  };
 
   const onError = (message: string) => {
     setAlert({
@@ -74,7 +73,7 @@ export default function AddBook() {
             Search Book
           </Typography>
           <Box sx={{ mt: 1 }}>
-            <SendBook onSuccess={(q : IBookResponse[]) => onSuccess(q)} onError={onError} />
+            <SendBook onSuccess={(q: IBookResponse[]) => onSuccess(q)} onError={onError} />
           </Box>
           <Box sx={{ mt: 3 }}>
             {results.map((book: IBookResponse) => (
