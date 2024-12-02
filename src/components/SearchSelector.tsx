@@ -1,4 +1,4 @@
-import { Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Stack, Button, ButtonGroup } from '@mui/material';
 
 import SearchMethod from './SearchMethod';
 
@@ -11,20 +11,20 @@ export default function SearchSelector({
 }) {
   return (
     <Stack direction="column" spacing={2} justifyContent="center">
-      <ToggleButtonGroup exclusive value={initialValue} onChange={onClick}>
-        <ToggleButton value={1}>
+      <ButtonGroup variant="text">
+        <Button value={1} onClick={(event) => onClick(event, 1)}>
           <SearchMethod method={1} />
-        </ToggleButton>
-        <ToggleButton value={2}>
+        </Button>
+        <Button value={2} onClick={(event) => onClick(event, 2)}>
           <SearchMethod method={2} />
-        </ToggleButton>
-        <ToggleButton value={3}>
+        </Button>
+        <Button value={3} onClick={(event) => onClick(event, 3)}>
           <SearchMethod method={3} />
-        </ToggleButton>
-        <ToggleButton value={4}>
+        </Button>
+        <Button value={4} onClick={(event) => onClick(event, 4)}>
           <SearchMethod method={4} />
-        </ToggleButton>
-      </ToggleButtonGroup>
+        </Button>
+      </ButtonGroup>
     </Stack>
   );
 }
