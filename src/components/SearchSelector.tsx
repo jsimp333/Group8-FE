@@ -11,7 +11,7 @@ export default function SearchSelector({
 }) {
   return (
     <Stack direction="column" spacing={2} justifyContent="center">
-      <ButtonGroup variant="text">
+      <ButtonGroup sx={{justifyContent:"center"}}>
         <Button value={1} onClick={(event) => onClick(event, 1)}>
           <SearchMethod method={1} />
         </Button>
