@@ -52,7 +52,8 @@ export default function SearchBook({ onSuccess, onError }: { onSuccess: (q: IBoo
   return (
     <>
       <Stack spacing={3} sx={{ mb: 2 }}>
-        <SearchSelector initialValue={searchMethod} onClick={(_, newMethod) => setSearchMethod(newMethod)} />
+        <SearchSelector onClick={(_, newMethod) => setSearchMethod(newMethod)} />
+        {/* <SearchSelector initialValue={searchMethod} onClick={(_, newMethod) => setSearchMethod(newMethod)} /> */}
       </Stack>
       <Formik
         innerRef={formRef}
