@@ -100,7 +100,7 @@ export default function SearchBook({ onSuccess, onError }: { onSuccess: (q: IBoo
                   />
                 </Stack>
                 {touched.searchValue && errors.searchValue && (
-                  <FormHelperText error id="standard-weight-helper-text-title-book-send">
+                  <FormHelperText error id="standard-weight-helper-text-title-book-search">
                     {errors.searchValue}
                   </FormHelperText>
                 )}
