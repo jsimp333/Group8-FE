@@ -58,12 +58,9 @@ export default function SendBook({
         })}
         onSubmit={(values, { setErrors, setSubmitting, setValues, resetForm }) => {
           console.dir(values);
-
-          
-
           axios
             .post('/book', { title: values.title, author: values.author, date: values.date, isbn: values.isbn,
-               image_url: values.image_url ? values.image_url : noImageURL, image_small_url: values.image_small_url ? values.image_small_url : noSmallImageURL })
+               image_url: values.image_url ? values.image_url : noImageURL, image_small_url: values.image_small_url ? values.image_small_url : noSmallImageURL})
             .then((response) => {
               setSubmitting(false);
               resetForm({ values: initialValues });
@@ -166,7 +163,6 @@ export default function SendBook({
                   </FormHelperText>
                 )}
               </Grid>
-
               <Grid item xs={12}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="image_url">Image URL</InputLabel>
@@ -210,7 +206,7 @@ export default function SendBook({
                   </FormHelperText>
                 )}
               </Grid>
-
+    
               {errors.submit && (
                 <Grid item xs={12}>
                   <FormHelperText error>{errors.submit}</FormHelperText>

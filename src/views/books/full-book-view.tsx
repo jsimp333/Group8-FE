@@ -3,21 +3,27 @@
 import axios from 'utils/axios';
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import * as React from 'react';
 import { IBook } from 'types/books';
 import { BookCover } from 'book-cover-3d';
-import { Box, Container, Stack } from '@mui/system';
-import { Link, List, ListItem, Rating, Typography } from '@mui/material';
+import { Box, Container, Stack, Button, Rating, Typography, Link, List, ListItem, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { numberWithCommas } from 'utils/design-utils';
 
 const bookWidths = [30, 40, 50, 60, 70, 80, 90, 100];
 
+
 export default function FullBookView() {
   const queries = useSearchParams();
-  const [book, setBook] = useState<undefined | null | IBook>(undefined); // undefined: loading, null: not found, book: found
+  const [book, setBook] = useState<undefined | null | IBook>(undefined); 
+  const [value, setValue] = useState<number | null>(null);
+  const [bookID, setID] = useState<number | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false); 
 
   useEffect(() => {
     if (!queries.has('isbn')) {
       setBook(null);
+      setID(null);
       return;
     }
     // Fetch book details from the server using the `isbn` query parameter
@@ -26,8 +32,8 @@ export default function FullBookView() {
     axios
       .get(route)
       .then((response) => {
-        console.log(response.data);
         setBook(response.data.entries[0].IBook);
+        setID(response.data.entries[0].id);
       })
       .catch((error) => {
         console.error(error);
@@ -35,12 +41,69 @@ export default function FullBookView() {
       });
   }, [queries]);
 
+  const handleDelete = () => {
+    if (!book) return;
+    if(window.confirm(`Are you sure you want to delete the book "${book.title}"`)) {
+      axios
+        .delete(`/book/isbn/${book.isbn13}`)
+        .then(() => {
+          setBook(null);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+  }
+
+  const handleSubmit = () => {
+    if (value !== null && book) {
+      setIsSubmitting(true);
+        const ratingChanges = {
+        rating_1_star: 0,
+        rating_2_star: 0,
+        rating_3_star: 0,
+        rating_4_star: 0,
+        rating_5_star: 0
+      };
+      if (value === 1) {
+        ratingChanges.rating_1_star = 1;
+      } else if (value === 2) {
+        ratingChanges.rating_2_star = 1;
+      } else if (value === 3) {
+        ratingChanges.rating_3_star = 1;
+      } else if (value === 4) {
+        ratingChanges.rating_4_star = 1;
+      } else if (value === 5) {
+        ratingChanges.rating_5_star = 1;
+      }
+      axios
+        .put(`/book/rate/${bookID}`, ratingChanges)
+        .then(() => {
+          const newCount = book.ratings.count + 1;
+          const totalRatings = book.ratings.average * book.ratings.count + value;
+          const newAverage = totalRatings / newCount;
+          setBook({
+            ...book,
+            ratings: {
+              ...book.ratings,
+              average: newAverage,
+              count: newCount
+            }
+          });
+          alert('Rating submitted!');
+          setIsSubmitting(false);
+        })
+        .catch((error) => {
+          console.error(error);
+          alert('Failed to submit rating');
+          setIsSubmitting(false);
+        });
+    }
+  };
   return (
     <Container>
       {book === undefined && (
-        <>
-          <Typography variant="h1">Loading...</Typography>
-        </>
+        <Typography variant="h1">Loading...</Typography>
       )}
       {book === null && (
         <>
@@ -49,7 +112,7 @@ export default function FullBookView() {
         </>
       )}
       {book && (
-        <Container sx={{mt: 3}}>
+        <Container sx={{ mt: 3 }}>
           <Stack direction="row" spacing={2}>
             <Box sx={{ mt: 10 }}>
               <BookCover
@@ -62,18 +125,25 @@ export default function FullBookView() {
                 <img src={book.icons.large} alt={book.title} />
               </BookCover>
             </Box>
-            <Stack direction="column" spacing={2} sx={{ pl: 4}}>
+            <Stack direction="column" spacing={2} sx={{ pl: 4 }}>
               <Typography variant="h2">{book.title}</Typography>
-              
-              {/* <Typography variant="h6" sx={{mt: 5}}>Author{book.authors.split(', ').length > 1 && "s"}</Typography> */}
-              
-              <List sx={{ mt: 0, display: 'flex', flexDirection: 'row', padding: 0, gap: 1, justifyContent: 'flex-start'}}>
-                <ListItem key={0} sx={{width: 'auto', padding: 0}}>
+
+              <List
+                sx={{
+                  mt: 0,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  padding: 0,
+                  gap: 1,
+                  justifyContent: 'flex-start',
+                }}
+              >
+                <ListItem key={0} sx={{ width: 'auto', padding: 0 }}>
                   <Typography>By </Typography>
                 </ListItem>
                 {book.authors.split(', ').map((author) => {
                   return (
-                    <ListItem key={author} sx={{width: 'auto', padding: 0}}>
+                    <ListItem key={author} sx={{ width: 'auto', padding: 0 }}>
                       <Link href={`/books/search?author=${author}`}>{author}</Link>
                       {book.authors.split(', ').indexOf(author) < book.authors.split(', ').length - 1 && ', '}
                     </ListItem>
@@ -81,11 +151,33 @@ export default function FullBookView() {
                 })}
               </List>
               <Stack direction="row" spacing={2}>
-                <Rating defaultValue={book.ratings.average} precision={0.1} readOnly />
+                <Rating value={book.ratings.average} precision={0.1} readOnly />
                 <Typography>({numberWithCommas(book.ratings.count)} ratings)</Typography>
               </Stack>
               <Typography>Publication Year: {book.publication}</Typography>
-              </Stack>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  ms: 3,
+                }}
+              >
+                <Typography component="legend">Add a Rating</Typography>
+                <Rating
+                  value={value}
+                  onChange={(event, newValue) => {
+                    setValue(newValue);
+                  }}
+                />
+                <Button variant="contained" color="primary" onClick={handleSubmit} disabled={isSubmitting || value === null} sx={{ mt: 2 }} >
+                  {isSubmitting ? 'Submitting...' : 'Submit'}
+                </Button>
+              </Box>
+              <IconButton aria-label="delete" color="error" onClick={handleDelete} sx={{ alignSelf: 'flex-start', mt: 2 }}>
+                <DeleteIcon />
+              </IconButton>
+            </Stack>
           </Stack>
         </Container>
       )}
