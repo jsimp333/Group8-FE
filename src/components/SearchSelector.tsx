@@ -1,28 +1,34 @@
-import { Stack, Button, ButtonGroup } from '@mui/material';
+import { FormControl, InputLabel, NativeSelect } from '@mui/material';
 
 export default function SearchSelector({
-  // initialValue,
   onClick
 }: {
-  // initialValue: number;
-  onClick: (event: React.MouseEvent<HTMLElement>, newPriority: number) => void;
+  onClick: (event: React.ChangeEvent<HTMLElement>, newPriority: number) => void;
 }) {
+
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newValue = Number(event.target.value);
+    onClick(event, newValue);
+  }
+
   return (
-    <Stack direction="column" spacing={2} justifyContent="center">
-      <ButtonGroup sx={{justifyContent:"center"}}>
-        <Button value={1} onClick={(event) => onClick(event, 1)}>
-          Title
-        </Button>
-        <Button value={2} onClick={(event) => onClick(event, 2)}>
-          Author
-        </Button>
-        <Button value={3} onClick={(event) => onClick(event, 3)}>
-          Year
-        </Button>
-        <Button value={4} onClick={(event) => onClick(event, 4)}>
-          ISBN
-        </Button>
-      </ButtonGroup>
-    </Stack>
+    <FormControl fullWidth>
+      <InputLabel variant="standard" htmlFor="search-method">
+        Search by
+      </InputLabel>
+      <NativeSelect
+        defaultValue={1}
+        onChange={handleChange}
+        inputProps={{
+          name: 'Search by',
+          id: 'search-method',
+        }}
+      >
+        <option value={1}>Title</option>
+        <option value={2}>Author</option>
+        <option value={3}>Publication year</option>
+        <option value={4}>ISBN</option>
+      </NativeSelect>
+    </FormControl>
   );
 }
