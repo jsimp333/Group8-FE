@@ -35,10 +35,10 @@ export default function SearchBook({ onSuccess, onError }: { onSuccess: (q: IBoo
   };
 
   const searchMethods: Record<number, { label: string; apiPath: string }> = {
-    1: { label: 'Title', apiPath: '/book/title/' },
-    2: { label: 'Author', apiPath: '/book/author/' },
-    3: { label: 'Year', apiPath: '/book/year/' },
-    4: { label: 'ISBN', apiPath: '/book/isbn/' }
+    1: { label: 'Title', apiPath: '/title/' },
+    2: { label: 'Author', apiPath: '/author/' },
+    3: { label: 'Year', apiPath: '/year/' },
+    4: { label: 'ISBN', apiPath: '/isbn/' }
   };
 
   const currentMethod = searchMethods[searchMethod];
