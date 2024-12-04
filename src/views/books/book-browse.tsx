@@ -28,7 +28,7 @@ export default function BookBrowse() {
   const [pagination, setPagination] = useState<PaginationData>(initialPaginationData);
 
   useEffect(() => {
-    const route = `/all?limit=${limit}&offset=${(page - 1) * limit}`;
+    const route = `/book/all?limit=${limit}&offset=${(page - 1) * limit}`;
     axios
       .get(route)
       .then((response) => {

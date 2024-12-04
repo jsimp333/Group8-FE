@@ -25,7 +25,7 @@ export default function FullBookView() {
       return;
     }
     // Fetch book details from the server using the `isbn` query parameter
-    let route = `/isbn/${queries.get('isbn')}`;
+    let route = `/book/isbn/${queries.get('isbn')}`;
 
     axios
       .get(route)
