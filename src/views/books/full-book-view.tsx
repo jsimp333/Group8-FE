@@ -6,9 +6,12 @@ import { useState, useEffect } from 'react';
 import * as React from 'react';
 import { IBook } from 'types/books';
 import { BookCover } from 'book-cover-3d';
-import { Box, Container, Stack, Button, Rating, Typography, Link, List, ListItem, IconButton } from '@mui/material';
+import { Box, Container, Divider, Stack, Button, Checkbox, Rating, Typography, Link, List, ListItem, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { numberWithCommas } from 'utils/design-utils';
+import EditIcon from '@mui/icons-material/Edit';
+import EditBook from 'sections/book-forms/bookEdit';
+import NotInterestedIcon from '@mui/icons-material/NotInterested';
 
 const bookWidths = [30, 40, 50, 60, 70, 80, 90, 100];
 
@@ -19,7 +22,7 @@ export default function FullBookView() {
   const [value, setValue] = useState<number | null>(null);
   const [bookID, setID] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false); 
-
+  const [editing, setEditing] = useState(false);
   useEffect(() => {
     if (!queries.has('isbn')) {
       setBook(null);
@@ -102,9 +105,7 @@ export default function FullBookView() {
   };
   return (
     <Container>
-      {book === undefined && (
-        <Typography variant="h1">Loading...</Typography>
-      )}
+      {book === undefined && <Typography variant="h1">Loading...</Typography>}
       {book === null && (
         <>
           <Typography variant="h1">Book not found</Typography>
@@ -126,57 +127,69 @@ export default function FullBookView() {
               </BookCover>
             </Box>
             <Stack direction="column" spacing={2} sx={{ pl: 4 }}>
-              <Typography variant="h2">{book.title}</Typography>
-
-              <List
-                sx={{
-                  mt: 0,
-                  display: 'flex',
-                  flexDirection: 'row',
-                  padding: 0,
-                  gap: 1,
-                  justifyContent: 'flex-start',
-                }}
-              >
-                <ListItem key={0} sx={{ width: 'auto', padding: 0 }}>
-                  <Typography>By </Typography>
-                </ListItem>
-                {book.authors.split(', ').map((author) => {
-                  return (
-                    <ListItem key={author} sx={{ width: 'auto', padding: 0 }}>
-                      <Link href={`/books/search?author=${author}`}>{author}</Link>
-                      {book.authors.split(', ').indexOf(author) < book.authors.split(', ').length - 1 && ', '}
+              {editing ? (
+                <EditBook onSuccess={() => setEditing(false)} onError={(error) => console.error(error)} />
+              ) : (
+                <>
+                  <Typography variant="h2">{book.title}</Typography>
+                  <List
+                    sx={{
+                      mt: 0,
+                      display: 'flex',
+                      flexDirection: 'row',
+                      padding: 0,
+                      gap: 1,
+                      justifyContent: 'flex-start',
+                    }}
+                  >
+                    <ListItem key={0} sx={{ width: 'auto', padding: 0 }}>
+                      <Typography>By </Typography>
                     </ListItem>
-                  );
-                })}
-              </List>
+                    {book.authors.split(', ').map((author, index) => (
+                      <ListItem key={author} sx={{ width: 'auto', padding: 0 }}>
+                        <Link href={`/books/search?author=${author}`}>{author}</Link>
+                        {index < book.authors.split(', ').length - 1 && ', '}
+                      </ListItem>
+                    ))}
+                  </List>
+                  <Stack direction="row" spacing={2}>
+                    <Rating value={book.ratings.average} precision={0.1} readOnly />
+                    <Typography>({numberWithCommas(book.ratings.count)} ratings)</Typography>
+                  </Stack>
+                  <Typography>Publication Year: {book.publication}</Typography>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      ms: 3
+                    }}
+                  >
+                    <Typography component="legend">Add a Rating</Typography>
+                    <Rating value={value} onChange={(event, newValue) => setValue(newValue)} />
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleSubmit}
+                      disabled={isSubmitting || value === null}
+                      sx={{ mt: 2 }}
+                    >
+                      {isSubmitting ? 'Submitting...' : 'Submit'}
+                    </Button>
+                  </Box>
+                </>
+              )}
+              <Divider>Admin Tools</Divider>
               <Stack direction="row" spacing={2}>
-                <Rating value={book.ratings.average} precision={0.1} readOnly />
-                <Typography>({numberWithCommas(book.ratings.count)} ratings)</Typography>
-              </Stack>
-              <Typography>Publication Year: {book.publication}</Typography>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  ms: 3,
-                }}
-              >
-                <Typography component="legend">Add a Rating</Typography>
-                <Rating
-                  value={value}
-                  onChange={(event, newValue) => {
-                    setValue(newValue);
-                  }}
+                <Checkbox
+                  onChange={(event) => setEditing(event.target.checked)}
+                  icon={<EditIcon sx={{ width: 20 }} />}
+                  checkedIcon={<NotInterestedIcon color="action" sx={{ width: 20 }} />}
                 />
-                <Button variant="contained" color="primary" onClick={handleSubmit} disabled={isSubmitting || value === null} sx={{ mt: 2 }} >
-                  {isSubmitting ? 'Submitting...' : 'Submit'}
-                </Button>
-              </Box>
-              <IconButton aria-label="delete" color="error" onClick={handleDelete} sx={{ alignSelf: 'flex-start', mt: 2 }}>
-                <DeleteIcon />
-              </IconButton>
+                <IconButton aria-label="delete" color="error" onClick={handleDelete} sx={{ alignSelf: 'flex-start', mt: 2 }}>
+                  <DeleteIcon />
+                </IconButton>
+              </Stack>
             </Stack>
           </Stack>
         </Container>

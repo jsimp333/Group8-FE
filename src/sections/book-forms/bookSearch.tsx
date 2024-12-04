@@ -39,6 +39,7 @@ export default function SearchBook({ onSuccess, onError }: { onSuccess: (q: IBoo
     2: { label: 'Author', apiPath: '/book/author/' },
     3: { label: 'Year', apiPath: '/book/year/' },
     4: { label: 'ISBN', apiPath: '/book/isbn/' }
+
   };
 
   const currentMethod = searchMethods[searchMethod];
@@ -52,7 +53,8 @@ export default function SearchBook({ onSuccess, onError }: { onSuccess: (q: IBoo
   return (
     <>
       <Stack spacing={3} sx={{ mb: 2 }}>
-        <SearchSelector initialValue={searchMethod} onClick={(_, newMethod) => setSearchMethod(newMethod)} />
+        <SearchSelector onClick={(_, newMethod) => setSearchMethod(newMethod)} />
+        {/* <SearchSelector initialValue={searchMethod} onClick={(_, newMethod) => setSearchMethod(newMethod)} /> */}
       </Stack>
       <Formik
         innerRef={formRef}

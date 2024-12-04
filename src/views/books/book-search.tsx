@@ -1,11 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import SearchIcon from '@mui/icons-material/Search';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Alert } from '@mui/material';
@@ -66,12 +63,6 @@ export default function AddBook() {
             alignItems: 'center'
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <SearchIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Search Book
-          </Typography>
           <Box sx={{ mt: 1 }}>
             <SendBook onSuccess={(q: IBookResponse[]) => onSuccess(q)} onError={onError} />
           </Box>

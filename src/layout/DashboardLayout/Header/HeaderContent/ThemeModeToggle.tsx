@@ -23,10 +23,7 @@ export default function ThemeModeToggle() {
     <FormGroup>
       <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
         <Tooltip title={mode === ThemeMode.DARK ? 'Switch to Light Mode' : 'Switch to Dark Mode'}>
-          <Switch
-            onChange={handleToggle}
-            inputProps={{ 'aria-label': 'light/dark mode switch' }}
-          />
+          <Switch onChange={handleToggle} inputProps={{ 'aria-label': 'light/dark mode switch' }} />
         </Tooltip>
       </Stack>
     </FormGroup>
