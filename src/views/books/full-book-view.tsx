@@ -12,9 +12,21 @@ import { numberWithCommas } from 'utils/design-utils';
 import EditIcon from '@mui/icons-material/Edit';
 import EditBook from 'sections/book-forms/bookEdit';
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
+import { Alert } from '@mui/material';
+
+interface IAlert {
+  showAlert: boolean;
+  alertMessage: string;
+  alertSeverity: string;
+};
+
+const EMPTY_ALERT: IAlert = {
+  showAlert: false,
+  alertMessage: '',
+  alertSeverity: ''
+};
 
 const bookWidths = [30, 40, 50, 60, 70, 80, 90, 100];
-
 
 export default function FullBookView() {
   const queries = useSearchParams();
@@ -23,6 +35,16 @@ export default function FullBookView() {
   const [bookID, setID] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false); 
   const [editing, setEditing] = useState(false);
+  const [alert, setAlert] = React.useState(EMPTY_ALERT);
+
+  const onError = () => {
+    setAlert({
+      showAlert: true,
+      alertMessage: 'Delete not successful, please try again or contact support.',
+      alertSeverity: 'error'
+    });
+  };
+  
   useEffect(() => {
     if (!queries.has('isbn')) {
       setBook(null);
@@ -51,8 +73,10 @@ export default function FullBookView() {
         .delete(`/book/isbn/${book.isbn13}`)
         .then(() => {
           setBook(null);
+          window.history.back();
         })
         .catch((error) => {
+          onError();
           console.error(error);
         });
     };
@@ -104,6 +128,12 @@ export default function FullBookView() {
     }
   };
   return (
+    <>
+    {alert.showAlert && (
+      <Alert severity={alert.alertSeverity as any} onClose={() => setAlert(EMPTY_ALERT)}>
+        {alert.alertMessage}
+      </Alert>
+    )}
     <Container>
       {book === undefined && <Typography variant="h1">Loading...</Typography>}
       {book === null && (
@@ -195,5 +225,6 @@ export default function FullBookView() {
         </Container>
       )}
     </Container>
+    </>
   );
 }
