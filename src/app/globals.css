@@ -4,3 +4,14 @@
 .css-13ddxbb > * + * {
   margin: 0 !important;
 }
+
+.view-books {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.view-book-small-image {
+  max-width: 152px;
+  max-height: 152px;
+}
