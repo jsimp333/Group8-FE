@@ -37,14 +37,21 @@ export default function FullBookView() {
   const [editing, setEditing] = useState(false);
   const [alert, setAlert] = React.useState(EMPTY_ALERT);
 
-  const onError = () => {
+  const onError = (message:string) => {
     setAlert({
       showAlert: true,
-      alertMessage: 'Delete not successful, please try again or contact support.',
+      alertMessage: message,
       alertSeverity: 'error'
     });
   };
-  
+
+  const onSuccess = (message:string) => {
+    setAlert({
+      showAlert: true,
+      alertMessage: message,
+      alertSeverity: 'success'
+    });
+  };
   useEffect(() => {
     if (!queries.has('isbn')) {
       setBook(null);
@@ -73,10 +80,11 @@ export default function FullBookView() {
         .delete(`/book/isbn/${book.isbn13}`)
         .then(() => {
           setBook(null);
+          onSuccess("Book Deleted!");
           window.history.back();
         })
         .catch((error) => {
-          onError();
+          onError("Delete not successful, please try again or contact support.");
           console.error(error);
         });
     };
@@ -117,12 +125,12 @@ export default function FullBookView() {
               count: newCount
             }
           });
-          alert('Rating submitted!');
+          onSuccess("Rating Updated");
           setIsSubmitting(false);
         })
         .catch((error) => {
           console.error(error);
-          alert('Failed to submit rating');
+          onError("Rating not successful, please try again or contact support.");
           setIsSubmitting(false);
         });
     }
