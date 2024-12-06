@@ -10,13 +10,7 @@ export default function ThemeModeToggle() {
   let { mode, onChangeMode } = useContext(ConfigContext);
 
   const handleToggle = () => {
-    if (mode == ThemeMode.DARK) {
-      mode = ThemeMode.LIGHT;
-    } else {
-      mode = ThemeMode.DARK;
-    }
-    console.log('Toggling to:', mode);
-    onChangeMode(mode);
+    onChangeMode(mode === ThemeMode.LIGHT ? ThemeMode.DARK : ThemeMode.LIGHT);
   };
 
   return (
