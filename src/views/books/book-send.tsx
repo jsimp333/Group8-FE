@@ -12,7 +12,6 @@ import { Alert } from '@mui/material';
 
 import SendBook from 'sections/book-forms/bookSend';
 
-const defaultTheme = createTheme();
 
 interface IAlert {
   showAlert: boolean;
@@ -46,7 +45,7 @@ export default function AddBook() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+  <>
       {alert.showAlert && (
         <Alert severity={alert.alertSeverity as any} onClose={() => setAlert(EMPTY_ALERT)}>
           {alert.alertMessage}
@@ -73,6 +72,6 @@ export default function AddBook() {
           </Box>
         </Box>
       </Container>
-    </ThemeProvider>
+      </>
   );
 }
