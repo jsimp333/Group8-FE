@@ -112,6 +112,9 @@ export default function AuthForgotPassword() {
             } else {
               onSuccess();
             }
+            setSubmitting(false);
+        }).catch((error) => {
+          onError();
         });
         }}
       >
