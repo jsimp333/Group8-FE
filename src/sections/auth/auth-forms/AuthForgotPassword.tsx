@@ -1,8 +1,5 @@
 'use client';
 
-// next
-import { useRouter } from 'next/navigation';
-
 // material-ui
 import Button from '@mui/material/Button';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -17,7 +14,6 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 
 // project import
-import useScriptRef from 'hooks/useScriptRef';
 import AnimateButton from 'components/@extended/AnimateButton';
 
 
@@ -42,8 +38,6 @@ const EMPTY_ALERT: IAlert = {
 const phoneRegExp = /^\W?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
 
 export default function AuthForgotPassword() {
-  const scriptedRef = useScriptRef();
-  const router = useRouter();
 
   const [alert, setAlert] = useState(EMPTY_ALERT);
 
@@ -103,7 +97,7 @@ export default function AuthForgotPassword() {
           .matches(/[!@#$%^&*]/, 'Password must contain at least one special character')
           .oneOf([Yup.ref('newPassword')], 'Password does not match new password'),
         })}
-        onSubmit={(values, { setErrors, setSubmitting, setValues, resetForm }) => {
+        onSubmit={(values, { setSubmitting }) => {
           console.dir(values);
           axios.put('http://localhost:4000/forgotPassword', { username: values.email, email: values.email, phone: values.phone, newPassword: values.newPassword, confirmNewPassword: values.confirmNewPassword})
           .then((res: any) => {
@@ -113,7 +107,7 @@ export default function AuthForgotPassword() {
               onSuccess();
             }
             setSubmitting(false);
-        }).catch((error) => {
+        }).catch(() => {
           onError();
         });
         }}
